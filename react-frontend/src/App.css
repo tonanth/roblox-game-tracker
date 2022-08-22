@@ -1,0 +1,30 @@
+body {
+  background-color: #282c34;
+  color: aliceblue;
+}
+
+form input label {
+  padding: 10px;
+  border: 10px;
+}
+
+.game-entry-box {
+  
+}
+
+.TopBar h1 {
+  font-size: 32px;
+}
+
+.TopBar .game-entry-form {
+  border: 10px;
+  padding: 10px;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
