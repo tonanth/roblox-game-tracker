@@ -1,15 +1,24 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 body {
   background-color: #282c34;
   color: aliceblue;
 }
 
-form input label {
-  padding: 10px;
+.url-entry-box {
+  width: 600px;
+  font-size: x-large;
+  border-radius: 5px;
   border: 10px;
+  border-color: black;
+  margin: 10px;
+  margin-bottom: 20px;
 }
 
-.game-entry-box {
-  
+.refresh-button {
+  font-size: x-large;
 }
 
 .TopBar h1 {
