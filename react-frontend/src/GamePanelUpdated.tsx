@@ -1,32 +1,30 @@
+import { GameData } from './GameData'
+
 interface Props {
-  url : string,
-  name : string, 
-  description : string,
-  date_updated : string,
-  checked_name : string,
-  checked_description : string,
-  checked_date_updated : string
+  gameData : GameData
 }
 
-function GamePanelChanged(props : Props) {
 
+
+function GamePanelUpdated(props : Props) {
+  const gameData = props.gameData;
   return (
     <div className='game-panel'>
-      <h1>{props.url}</h1>
+      <h1>{gameData.url}</h1>
       <h2>Old name</h2>
-      <p>{props.checked_name}</p>
+      <p>{gameData.checked_name}</p>
       <h2>New name</h2>
-      <p>{props.name}</p>
+      <p>{gameData.name}</p>
       <h2>Old Descrption</h2>
-      <p>{props.checked_description}</p>
+      <p>{gameData.checked_description}</p>
       <h2>New Description</h2>
-      <p>{props.description}</p>
+      <p>{gameData.description}</p>
       <h2>Old Date Updated</h2>
-      <p>{props.date_updated}</p>
+      <p>{gameData.date_updated}</p>
       <h2>New Date Updated</h2>
-      <p>{props.checked_date_updated}</p>
+      <p>{gameData.checked_date_updated}</p>
     </div>
   )
 }
 
-export default GamePanelChanged
+export default GamePanelUpdated
