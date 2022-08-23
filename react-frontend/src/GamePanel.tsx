@@ -1,20 +1,20 @@
+import { GameData } from './GameData'
+
 interface Props {
-  url: string,
-  name: string,
-  description: string,
-  date_updated: string
+  gameData: GameData
 }
 
 function GamePanel(props: Props) {
+  const gameData = props.gameData
   return (
     <div className="game-panel">
-      <h1>{props.url}</h1>
+      <h1>{gameData.url}</h1>
       <h2>Name</h2>
-      <p>{props.name}</p>
+      <p>{gameData.name}</p>
       <h2>Description</h2>
-      <p>{props.description}</p>
+      <p>{gameData.description}</p>
       <h2>Date Updated</h2>
-      <p>{props.date_updated}</p>
+      <p>{gameData.date_updated}</p>
     </div>
   )
 }
