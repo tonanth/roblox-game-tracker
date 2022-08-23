@@ -8,17 +8,16 @@ body {
 }
 
 .url-entry-box {
-  width: 600px;
   font-size: x-large;
   border-radius: 5px;
   border: 10px;
   border-color: black;
-  margin: 10px;
   margin-bottom: 20px;
 }
 
 .refresh-button {
   font-size: x-large;
+  border-radius: 10px;
 }
 
 .TopBar h1 {
@@ -36,4 +35,43 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.App * {
+  width: 600px;
+}
+
+.game-panel {
+  border: solid;
+  border-color: aliceblue;
+  margin-top: 20px;
+}
+
+a {
+  color : aliceblue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.outdated {
+  color: red;
+}
+
+.updated {
+  color: greenyellow;
+}
+
+button:hover {
+  background-color: gray;
+}
+
+button:active {
+  background-color: black;
+}
+
+.game-panel-container-description {
+  text-decoration: underline;
 }

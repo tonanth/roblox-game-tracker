@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import TopBar from './TopBar';
 import './App.css';
 import { GameData } from './GameData'
+import GamePanel from './GamePanel'
+import GamePanelUpdated from './GamePanelUpdated'
 
 async function serverIsActive(setServerStatus: Function) : Promise<void> {
     const response = await fetch('http://localhost:3001/status', {
@@ -35,17 +37,24 @@ async function serverGetGameData(processGameData: Function) : Promise<void> {
   processGameData(rawData);
 }
 
+async function serverAddGameURL(url: string, serverRefreshGames: Function) : Promise<void> {
+  const response = await fetch('http://localhost:3001/api/addgameurl', {
+    method: 'PUT',
+    mode: 'cors'
+  })
+  serverRefreshGames();
+}
+
 async function serverDeleteGame(url : string, serverRefreshGames: Function) : Promise<void> {
   const response = await fetch('http://localhost:3001/api/deletegame', {
     method: 'DELETE',
     mode: 'cors'
   });
   console.log(`Deleted game with url ${url}`)
+  serverRefreshGames();
 }
 
-async function serverAddGame(url: string, serverRefreshGames: Function) : Promise<void> {
 
-}
 
 function App() {
 
@@ -60,6 +69,10 @@ function App() {
     serverGetGameData(processGameData)
   }
 
+  function handleAddNewGameURL(url : string) {
+    serverAddGameURL(url, handleRefresh)
+  }
+
   function processGameData(gameData : GameData[]) {
     const updatedGames = gameData.filter(game => ((game.name !== game.checked_name) || (game.description !== game.checked_description) || (game.date_updated !== game.checked_date_updated)));
     const nonUpdatedGames = gameData.filter(game => ((game.name === game.checked_name) && (game.description === game.checked_description) && (game.date_updated === game.checked_date_updated)));
@@ -69,9 +82,7 @@ function App() {
     setNonUpdatedGames(nonUpdatedGames);
   }
   
-  function handleAddNewURL(url : string) {
-    
-  }
+
 
   if(!serverStatus) 
     return (
@@ -80,8 +91,15 @@ function App() {
   else
     return (
       <div className="App">
-        <TopBar handleAddNewURL={handleAddNewURL} handleRefresh={handleRefresh} />
-
+        <TopBar handleAddNewURL={handleAddNewGameURL} handleRefresh={handleRefresh} />
+        <div className='game-panel-container'>
+          <h1 className='game-panel-container-description'>Updated Games</h1>
+          {updatedGames.map((game) => 
+            <div key={game.url}>
+              <GamePanelUpdated gameData={game}/>
+            </div>
+          )}
+        </div>
       </div>
     );
 }
