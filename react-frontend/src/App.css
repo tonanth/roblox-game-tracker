@@ -75,3 +75,12 @@ button:active {
 .game-panel-container-description {
   text-decoration: underline;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.update-game-data-button {
+  font-size: xx-large;
+}

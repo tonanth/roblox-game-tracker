@@ -84,6 +84,14 @@ function App() {
     serverAddGameURL(url, handleRefresh)
   }
 
+  function handleMarkGameAsChecked(gameData : GameData) {
+    console.log(`Marking game with url ${gameData.url} as checked`)
+  }
+
+  function handleRemoveGame(gameData : GameData){
+    console.log(`Removing game with URL ${gameData.url}`)
+  }
+
   function processGameData(gameData : GameData[]) {
     const updatedGames = gameData.filter(game => ((game.name !== game.checked_name) || (game.description !== game.checked_description) || (game.date_updated !== game.checked_date_updated)));
     const nonUpdatedGames = gameData.filter(game => ((game.name === game.checked_name) && 
@@ -111,7 +119,7 @@ function App() {
           <h1 className='game-panel-container-description'>Updated Games</h1>
           {updatedGames.map((game) => 
             <div key={game.url}>
-              <GamePanelUpdated gameData={game}/>
+              <GamePanelUpdated gameData={game} handleMarkGameAsChecked={handleMarkGameAsChecked} handleRemoveGame={handleRemoveGame} />
             </div>
           )}
           <div className='game-panel-container'>
