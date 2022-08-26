@@ -20,20 +20,12 @@ pool.on('error', (err, client) => {
   process.exit(-1)
 });
 
-// (async () => {
-//   const client = await pool.connect() 
-//   try {
-//     const res = await client.query('select * from roblox_game_tracker')
-//     console.log(res.rows[0])
-//   } finally {
-//     client.release()
-//   }
-// })().catch(err => console.log(err.stack)) 
 
 app.get('/status', (req, res) => {
   res.send('roblox-game-tracker');
   console.log("status requested")
 })
+
 
 app.get('/api/getgamedata', async (req, res) => {
   console.log('game data requested')
@@ -49,19 +41,42 @@ app.get('/api/getgamedata', async (req, res) => {
   }
 })
 
-app.put('/addgameurl', async (req, res) => {
+
+
+app.put('/api/addgameurl', async (req, res) => {
   const client = await pool.connect();
-  const query = 'insert into roblox_game_tracker (url) values ($1) on duplicate key update url=url'
-  values = {url : req.body.url}
+  const query = 'insert into roblox_game_tracker (url) values ($1) on conflict do nothing';
+  values = [req.body.url];
   try {
-    const res = await client.query(query, values);
+    const res = await client.query(query, values)
   } catch(err) {
     console.log(err.stack);
   } finally {
     client.release();
   }
+  console.log(`New URL Added : ${values[0]}`)
+  res.status(200).send('URL Added');
 });
+
+app.patch('/api/updategamedata', async (req, res) => {
+  const client = await pool.connect();
+  // const query
+  client.release(); 
+})
+
+app.put('/')
+
 
 app.listen(port, () => {
   console.log(`Server started, listening on port ${port}`)
 });
+
+// (async () => {
+//   const client = await pool.connect() 
+//   try {
+//     const res = await client.query('select * from roblox_game_tracker')
+//     console.log(res.rows[0])
+//   } finally {
+//     client.release()
+//   }
+// })().catch(err => console.log(err.stack)) 
