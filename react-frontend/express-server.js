@@ -46,7 +46,7 @@ app.get('/api/getgamedata', async (req, res) => {
 app.put('/api/addgameurl', async (req, res) => {
   const client = await pool.connect();
   const query = 'insert into roblox_game_tracker (url) values ($1) on conflict do nothing';
-  values = [req.body.url];
+  const values = [req.body.url];
   try {
     const res = await client.query(query, values)
   } catch(err) {
@@ -54,14 +54,37 @@ app.put('/api/addgameurl', async (req, res) => {
   } finally {
     client.release();
   }
-  console.log(`New URL Added : ${values[0]}`)
+  console.log(`New URL Added : ${values[0]}`);
   res.status(200).send('URL Added');
 });
 
-app.patch('/api/updategamedata', async (req, res) => {
+
+app.delete('/api/deletegamebyurl', async (req, res) => {
   const client = await pool.connect();
-  // const query
-  client.release(); 
+  const query = 'delete from roblox_game_tracker where url = ($1)';
+  const values = [req.body.url];
+  try {
+    const res = await client.query(query, values);
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    client.release();
+  }
+  console.log(`Url deleted : ${values[0]}`)
+  res.status(200).send('URL Deleted')
+})
+
+app.patch('/api/markgameaschecked', async (req, res) => {
+  const client = await pool.connect();
+  const query = 'update roblox_game_tracker set checked_name = ($1), checked_description = ($2), checked_date_updated = ($3) where url = ($4)'
+  const values = [req.body.name, req.body.description, req.body.date_updated, req.body.url];
+  try {
+    const res = await client.query(query, values)
+  } finally {
+    client.release()
+  }
+  console.log(`Marked game with URL : ${values[3]} as checked`)
+  res.status(200).send('Game marked')
 })
 
 app.put('/')
