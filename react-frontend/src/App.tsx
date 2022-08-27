@@ -4,6 +4,7 @@ import './App.css';
 import { GameData } from './GameData'
 import GamePanel from './GamePanel'
 import GamePanelUpdated from './GamePanelUpdated'
+import GamePanelUnprocessed from './GamePanelNonprocessed'
 
 async function serverIsActive(setServerStatus: Function) : Promise<void> {
     const response = await fetch('http://localhost:3001/status', {
@@ -49,8 +50,8 @@ async function serverAddGameURL(url: string, serverRefreshGames: Function) : Pro
   serverRefreshGames();
 }
 
-async function serverDeleteGame(url : string, serverRefreshGames: Function) : Promise<void> {
-  const response = await fetch('http://localhost:3001/api/deletegame', {
+async function serverDeleteGameByURL(url : string, serverRefreshGames: Function) : Promise<void> {
+  const response = await fetch('http://localhost:3001/api/deletegamebyurl', {
     method: 'DELETE',
     mode: 'cors',
     headers: {
@@ -63,14 +64,21 @@ async function serverDeleteGame(url : string, serverRefreshGames: Function) : Pr
 }
 
 async function serverUpdateGameData(gameData : GameData, serverRefreshGames: Function) : Promise<void> {
-  const response = await fetch('http://localhost:3001/api/')
+  const response = await fetch('http://localhost:3001/api/markgameaschecked', {
+    method: 'PATCH',
+    mode: 'cors',
+    headers: {
+      'Content-Type' : 'application/json'
+    },
+    body: JSON.stringify(gameData)
+  })
 }
 
 function App() {
 
   const [nonUpdatedGames, setNonUpdatedGames] = useState<GameData[]>([]);
   const [updatedGames, setUpdatedGames] = useState<GameData[]>([]);
-  const [nonInitializedGames, setNonInitializedGames] = useState<GameData[]>([])
+  const [unprocessedGames, setunprocessedGames] = useState<GameData[]>([])
 
   const [serverStatus, setServerStatus] = useState<boolean>(false);
 
@@ -86,10 +94,12 @@ function App() {
 
   function handleMarkGameAsChecked(gameData : GameData) {
     console.log(`Marking game with url ${gameData.url} as checked`)
+    serverUpdateGameData(gameData, handleRefresh);
   }
 
   function handleRemoveGame(gameData : GameData){
     console.log(`Removing game with URL ${gameData.url}`)
+    serverDeleteGameByURL(gameData.url, handleRefresh)
   }
 
   function processGameData(gameData : GameData[]) {
@@ -100,9 +110,10 @@ function App() {
                                                      (game.name !== null) &&
                                                      (game.description !== null) && 
                                                      (game.date_updated !== null)));
-    const nonInitializedGames = gameData.filter(game => ((game.name === null) && (game.description === null) && (game.date_updated === null)));
+    const unprocessedGames = gameData.filter(game => ((game.name === null) && (game.description === null) && (game.date_updated === null)));
     setUpdatedGames(updatedGames);
     setNonUpdatedGames(nonUpdatedGames);
+    setunprocessedGames(unprocessedGames)
   }
   
 
@@ -123,16 +134,19 @@ function App() {
             </div>
           )}
           <div className='game-panel-container'>
-            <h1 className='game-panel-container-description'>Non-Updated Games</h1>
+            <h1 className='game-panel-container-description'>Unupdated Games</h1>
             {nonUpdatedGames.map((game) => 
             <div key={game.url}>
               <GamePanel gameData={game} />
             </div>)}
           </div>
           <div className='game-panel-container'>
-            <h1 className='game-panel-container-description'>
-              
-            </h1>
+            <h1 className='game-panel-container-description'>Unprocessed Games</h1>
+            {unprocessedGames.map((game) => 
+            <div key={game.url}>
+              <GamePanelUnprocessed gameData={game} />
+            </div>
+            )}
           </div>
         </div>
       </div>
