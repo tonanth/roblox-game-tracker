@@ -2,7 +2,7 @@
 This is a Python program developed using JetBrains Pycharm to continuously check Roblox game pages for updates and updates a Postgres database accordingly.  
 
 # Prerequisites
-## Windows (not necessarity)
+## Windows (not necessarily)
 This program is created, tested and ran on Windows 11. It may work flawlessly on other OSes or may require some tinkering.
 
 ## Postgres 
