@@ -87,9 +87,6 @@ app.patch('/api/markgameaschecked', async (req, res) => {
   res.status(200).send('Game marked')
 })
 
-app.put('/')
-
-
 app.listen(port, () => {
   console.log(`Server started, listening on port ${port}`)
 });
